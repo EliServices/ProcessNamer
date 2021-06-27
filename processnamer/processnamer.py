@@ -1,4 +1,4 @@
-#Version: 1.0, Copyright: EliServices, Licence: Free for non-commercial use
+#Version: 1.0, Copyright: EliServices
 
 class processGame:                                                                                    #The name that your target process is supposed to have. Can be replaced later.
     def __init__(self):
@@ -23,9 +23,21 @@ class processGame:                                                              
         log.flush()
         return
 
-    def nameStop(self,id):
+    def nameStop(self,id,sig="SIGKILL"):
+        sig = sig.upper()
+        if sig == "SIGKILL":
+            sig = " -KILL"
+        elif sig == "SIGINT":
+           sig = " -INT"
+        elif sig == "SIGTERM":
+            sig = " -TERM"
+        elif sig == "SIGSTOP":
+            sig = " -STOP"
+        else:
+            sig = ""
+
         global stream
-        stream = os.popen("pkill -e -f " + id)                                                        #bash command to kill process with id "id"
+        stream = os.popen("pkill" + sig + " -e -f " + id)                                             #bash command to kill process with id "id"
         output = stream.read()
         return output
 
